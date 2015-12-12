@@ -1,0 +1,34 @@
+Description: fix ps
+ TODO: fix in file output.c to show nice.
+ .
+ procps (1:3.2.8-11ubuntu6.4) precise; urgency=medium
+ .
+   * ignore_erofs.patch: Same as ignore_eaccess but for the case where
+     part of /proc is read/only. (LP: #1419554)
+Author: Stéphane Graber <stgraber@ubuntu.com>
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/1419554
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: http://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- procps-3.2.8.orig/ps/output.c
++++ procps-3.2.8/ps/output.c
+@@ -651,7 +651,7 @@ static int pr_pri_api(char *restrict con
+ }
+ 
+ static int pr_nice(char *restrict const outbuf, const proc_t *restrict const pp){
+-  if(pp->sched!=0 && pp->sched!=-1) return snprintf(outbuf, COLWID, "-");
++  if(pp->sched!=0 && pp->sched!=3 && pp->sched!=-1) return snprintf(outbuf, COLWID, "-");
+   return snprintf(outbuf, COLWID, "%ld", pp->nice);
+ }
+ 
